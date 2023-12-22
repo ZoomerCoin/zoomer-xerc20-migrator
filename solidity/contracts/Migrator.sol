@@ -25,4 +25,8 @@ contract ZoomerMigrator is Auth {
     OLD_ZOOMER.transferFrom(msg.sender, address(this), _amount);
     NEW_ZOOMER.transfer(msg.sender, _amount);
   }
+
+  function rescue(address _token, uint256 _amount) external requiresAuth {
+    IERC20(_token).transfer(msg.sender, _amount);
+  }
 }
