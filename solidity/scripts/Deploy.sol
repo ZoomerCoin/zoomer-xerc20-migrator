@@ -3,28 +3,27 @@ pragma solidity =0.8.19;
 
 import {Script} from 'forge-std/Script.sol';
 import {Greeter} from 'contracts/Greeter.sol';
+import {ZoomerMigrator} from 'contracts/ZoomerMigrator.sol';
 import {IERC20} from 'isolmate/interfaces/tokens/IERC20.sol';
 
 abstract contract Deploy is Script {
-  function _deploy(string memory greeting, IERC20 token) internal {
+  function _deploy(address _old, address _new) internal {
     vm.startBroadcast();
-    new Greeter(greeting, token);
+    new ZoomerMigrator(_old, _new);
     vm.stopBroadcast();
   }
 }
 
 contract DeployMainnet is Deploy {
-  function run() external {
-    IERC20 weth = IERC20(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
-
-    _deploy('some real greeting', weth);
-  }
+  function run() external {}
 }
 
 contract DeployGoerli is Deploy {
-  function run() external {
-    IERC20 weth = IERC20(0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6);
+  function run() external {}
+}
 
-    _deploy('some test greeting', weth);
+contract DeployPolygon is Deploy {
+  function run() external {
+    _deploy(0xb2588731d8f6F854037936d6ffac4c13d0b6bd62, 0xB962150760F9A3bB00e3E9Cf48297EE20AdA4A33);
   }
 }
